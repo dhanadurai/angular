@@ -1,0 +1,233 @@
+														Routing
+
+	* Routing is concept to display the component by url path.
+	* To implement the routing we generate the project with routing or add the routing to the existing project, for that we use 
+	  '--routing' to generate the routing in the existing project , for new project give 'Y' on the route qn.
+	* After creating the router with project then configure the route with app.module.ts to access the route.
+	* The routed compnents are view after the <router-outlet></router-outlet> in (app.component.html or where the router wants to take 
+	  place).
+
+ Configure the route:
+
+  	* Configure the route by import it with the  app.module.ts.
+  	* Then in app-routing.module.ts file declare the constant to define the path and component that to be route and import the required 
+  	  components also.
+  	  eg: 
+
+  	  	const route: Routers =[{path:"<name>",component:<componentClassName>},...];
+
+  	  	const route: Routers = [
+  	  			{path:"addDetails",component : AddDetailsComponent}
+  	  	];
+ 	* importing the same component in routing and app.module file so we create new array with componentClas name in route.module.ts file 
+ 	  to export and import the components to app.module.ts file.
+
+ 	* import the const name with AppRoutingModule and also declare it in declaration and remove the same component where we have in the 
+ 	  array.
+
+ Displaying the Components:
+
+ 	* To display the components use the <router-outlet></router-outlet> in app html 
+ 	* To display the router by link has the two special directives
+
+ 	   > routerLink  (it specifies the path to redirect or component)
+ 	   > routerLinkActive (It specifies the css porperty when it is in active)
+
+  @ routerLink :
+
+  	* It specifies the path to redirect or component.
+  	* In the routerLink attribute use the path that specified in router.module.ts file
+  	  eg: 
+
+  	  	<a routerLink="/<path>">link1</a>
+
+  	  	<a routerLink="/addDetails"></a>
+
+  @ routerLinkActive :
+
+  	* It specifies the css porperty to apply when it is in active.
+  	  eg: 
+
+  	  	<a routerLink="/<path>" routerLinkActive="<cssName>"></a>
+  		<a routerLink="/addDetails" routerLinkActive="active"></a>
+
+=================================================================================
+
+Wildcard route:
+
+	* wild card route is takes place when we enters wrong url or undefined path it redirect it to the compenent which has the message
+	  about the wrong path.
+	* The wild card route is represent with '**' in the path in route const variable.
+	* The wild card is placed only in last on the const array because the path or url not matched with any routes it take the place.
+	  eg:
+	   const route: Routers = [
+  	  			{path:"addDetails",component : AddDetailsComponent},
+  	  			{path:"**", component : UndefinedComponent}
+  	  	];
+  	* By using the wildcard Route if their is no path or url after 'localhost:4200' it displays the undefined component to avoid this use
+  	  the default route.
+  	* The default route takes place at first in routes array , In the default route give the path is in empty and use the redirectTo 
+  	   instead of component and mention the path in the redirect property and we use another property is called pathMatch.
+  	* pathMatch property tells the anugular to how to match the path with configured path and it has two values.
+  	  eg:
+
+  	   	I) prefix
+  	   	II) full
+  	 @ prefix:
+
+  	    It means the prefix of the url is empty then redirect it to the path that specified into the redirectTo property.
+
+  	 @ full
+
+  	 	It means the path that full path is empty then it redirect into specifed path
+
+     eg:
+
+     	 const route: Routers = [
+  	  			{path:"",redirectTo : '/addDetails' , pathMatch : 'prefix/full'},
+  	  			{path:"addDetails",component : AddDetailsComponent},
+  	  			{path:"**", component : UndefinedComponent}
+  	  	];
+
+Routing with Params:
+ 
+	* We can pass a value from one component to another component by routing.
+	* To that first initialize the routing path with the variable placeholder in the const array in routing.module.ts file.	
+	* To send and get the value from url by routing is possible by the navigate() and activedRoute() from route class.
+	* To send a value from one component to another component by navigate()
+	* To receive the value from one another component by activedRoute injector.
+ 
+ @ navigate()
+
+ 	* The navigate function is used in the sender component.
+ 	* navigate() function has param as array, the array has two values , first value as 'active link / path ' and second as 'value that 
+ 	  want to pass'.
+ 	
+ 	syntax:
+
+ 	   navigate(['<path/link>','value']);
+ 	
+ 	  eg:
+
+ 	    In route.module.ts file
+
+ 	     const route: Routers = [
+  	  			{path:"",redirectTo : '/addDetails' , pathMatch : 'prefix/full'},
+  	  			{path:"addDetails",component : AddDetailsComponent},
+  	  			{path:"addDetails/:id",component : ViewComponent},// the '/:id' is the placeholder for value that would pass to the  
+  	  			                                                    //component 'ViewComponent' and the placeholder name is 'id'
+  	  			{path:"**", component : UndefinedComponent}
+  	  	 ];
+
+  	  	In addDetils.component.ts 
+
+  	  		import { router } form '@angular/route';
+
+  	  		constructor (private route : Router){}
+
+  	  		public change(param)
+  	  		{
+  	  			this.route.navigate(['/addDeails:/id',param.id]);
+  	  		}
+ @ activedRoute
+
+ 	* The activatedRoute is used in the recevier component.
+ 	* By using this class from 'route' we can receive the value from route.
+ 	* Within this we use the '.snapshot.paramMap.get()'.
+ 	* The snapshot property get value olny from another component and it not get the value from same component reused because of
+ 	  the ngOnInit() method. the ngOnInit() method calls for a component when it calls first time.
+
+ 	eg : 
+
+ 		In viewDetails.component.ts file
+
+ 		import {ActivedRoute} from '@angular/route';
+ 		public compId;
+ 		constructor (private route: ActivedRoute){}
+ 		ngOnInit()
+ 		{
+ 			let id ;
+ 			id = this.route.snapshot.paramMap.get('id');//the name id is must match with the placeholder name
+ 			this.compId = id;
+ 		}
+
+
+paramMap :
+
+	* using the snapshot to receive the value from route has disadvantage, if the component has reuse itself then the snapshot not 
+	  get any values from route to sovle it using the paramMap.
+	* To use paramMap import the paramMap from '@angular/route' and inject it.
+	  eg:
+
+	   In component file :
+
+	    import {ActivedRoute , router , ParamMap} from '@angular/router';
+ 		
+ 		constructor (private route: ActivedRoute , private router: Router){}
+
+ 	* By using the paramMap it returns the observables so we want to subscribe it to get the value from params.
+ 	  eg: 
+
+ 	    In component file:
+
+ 	     ngOnInit()
+ 	     {
+ 	     	this.route.paramMap.subscribe((params: paramMap) => {this.id = parseInt(params.get('id'))});
+ 	     }
+
+Optional Route parameters:
+
+	* we pass an optional parameter as in object formate on navigate() in linkparameters array.
+	* The object has the structure with id and key formate.
+	* The optional route parameters not take place in view part it just for identity.
+	 eg: 
+
+	 	this.route.navigate(['/addDeails:/id',{id : param.id}]);
+
+Relative Navigation:
+
+	* Relative navigation is nothing but not specifies the path directly, and use the this.route to specify the current path to the    
+	  route.
+	* By using the '../' to go back a component in path . 
+	* To change the absolute to relative path by giving the value on linksparameter array and not want to give the path instead of this
+	  use the optional parameter with id of relativeTo and value as activatedRoute instance.
+
+	  eg:
+
+	   url : localhist://4200/component/1
+
+	   we use the '../' in path at code
+	   url : localhist://4200/component 
+
+child Route:
+ 	
+ 	* In such case we want to use the child route to display the specfic info / related info about the route for that we use the
+ 	  child route.
+ 	* To implement the child route use the children key in router const array in routing.module.ts file.
+ 	* The children key has array as value we want specify the number of path and component in object type.
+ 	* That child routes only display under the parent route only.
+ 	* To specify the view of child route to specify the <router-outlet> tag in the parent route html file.
+ 	* Before specify the child route import the component.
+ 	  eg:
+
+ 	    In routing.module.ts file:
+
+ 	       const route: Routers = [
+  	  			{
+  	  				path:"addDetails",
+  	  				component : AddDetailsComponent,
+  	  				children : [
+  	  				{ path: "content" , component  : ContentComponent},
+  	  				{ path : "overview" , component : OverviewComponent }
+  	  				]
+  	  			},
+  	  			{path:"**", component : UndefinedComponent}
+  	  		];
+
+  	  	In addDetails.component.html file
+
+  	  		<router-outlet></router-outlet>
+
+  	    In addDetails.component.ts file
+
+  	      this.router.navigate(['overview'],{relativeTo:this.route});

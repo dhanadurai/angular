@@ -1,0 +1,198 @@
+Basics Of Angular:
+
+
+	To create new angular project = ng new <project name> 
+	eg: ng new test-app
+
+
+ 	To navigate into the folder use cd project name
+ 	eg: cd test-app
+
+ 	To run the program use 'ng serve'
+
+---------------------------------------
+
+Architecture:
+
+1.Module:
+	
+	* angular app is a collection of modules 
+	* modules have the funcnality area of the project 
+	* In anugular must have one module and it called as root module (app)
+	* modules that we can import or export
+	* module has two major parts
+		i) components
+		ii) services
+	* module has one or more components and services
+
+ I)Components:
+
+	* components are the view part in the project 
+	* it has the navigation , section parts and body of the view 
+	* it has the HTML,CSS & class sections
+	* angular has atleast one component that is root component (i.e., AppComponent)
+	* all the components are nested with root component
+
+  class:
+
+	* class that controls the view logic of components
+
+ II) Services:
+
+ 	* services file has the bussiness logics
+
+--------------------------------------------------------------------------
+
+Flow Of Angular :
+	
+	To Know before Flow :
+		package.json :
+				It contains all the dependencies that is library files that are required to modules and packages that installed.
+
+	After the ng serve => main.ts => appModule(rootModule) => appComponent(rootComponent) => display the html on browser 
+
+	main.ts:
+		It is the entry point for the project.
+		In this file it triggers the base/root module app
+
+	appModule:
+		In this file create the class of appModule  and import the service , module and etc 
+		It specifies the component to run next or run instead of the module
+
+	appComponent:
+		It has the html and components view logic class file
+		In this file it creates the class for appComponents
+		In the class file we can put the variables to bind it with the html.
+
+--------------------------------------------------------------------------------
+
+19-04-2020:
+
+Components:
+	
+	* components are bulinding bocks of anugular applications
+	* components has three parts 
+		->	Template
+		-> 	class
+		->	MetaData
+
+	Template:
+		The template has the view and HTML parts 
+
+	Class:
+		The class has the view logics.
+		i.e, code , methods ,variables ,etc
+
+	MetaData:
+		The metadata has the information and decorators
+			-> the information has the details about the components
+			-> the decorators is a function that describes the class attach to it.
+
+Component Decorator:
+
+	* component decorator has three parts:
+		-> 	selector
+		-> 	templateUrl
+		-> 	styleUrls 
+	eg: 
+		@Component({
+				  selector: 'app-agent-turnaround',
+				  templateUrl: './agent-turnaround.component.html',
+				  styleUrls: ['./agent-turnaround.component.scss']
+				})
+
+	* the component decorator was placed above the component class that specifies it is not a normal class it is component class
+
+	Selector:
+		> selector is used to render the template into the selected specified area
+		> the selector has the name that should replace / render the template into the place
+		> the name of the selector was called in the index.html (i.e, <app-agent-turnaround></app-agent-turnaround>)
+		
+	TemplateUrl:
+		> it specified the what template should be rendered into where the selector placed
+
+	styleUrls:
+		> it specifies the path of the style sheets that affect only this component
+
+Creating New component:
+
+	* To create new component do the follow code ng g c <component name>
+		--	g -> generate
+		--  c -> component
+
+	* After creating the component it creates new four files 
+		# html , css ,ts ,spec.ts files 
+		# spec.ts file for testing purpose
+
+	* for add the created component into the already worked area
+		add the selector on app.component.html like (<app-test></app-test>)
+
+ Component decorator changes:
+
+  Selector:
+  	
+ 	* we can assign the selector in three ways:
+ 		# normal way (selector : app-test in html {<app-test></app-test>}) 
+ 		# with square bracket  the selector will placed in HTML as attribute (selector : [app-test] in HTML {<div app-test></div>})
+ 		# selector as class (selector : '.app-test' in HTML {<div class="app-test"></div>})
+
+  TemplateUrl:
+
+  	* for the whole template we use the templateUrl
+  	* we use inline template in ts file also like template (i.e., template : '<div>hii</div>')
+  	* for the multi line code use the '' instead of `` (i.e., `<div>
+  																	hii
+  																</div>`)
+
+  styleUrls:
+
+  	* style urls are same as template 
+  	* we use inline style in ts file use style it is an array (i.e., style : ['color:red'])
+  	* for the multi line css use the '' instead of `` (i.e., style:[`div.color:red`])
+
+------------------------------------------------------------------
+
+Interpolation:
+
+	* Interpolation is nothing but rendering the ts class variable into the template by using {{}}
+	* For first we declare a variable in class ts file 
+		eg: 
+			public name = "string";
+	* we can use the variable name within the {{}} to append it in html to view
+		eg:
+			<div>{{name}}</div>
+
+	Do's:
+
+		we can use the interpolation with expression , string append ,etc
+		eg :
+		 	{{2+2}} //returns 4
+		 	{{'welcome ' + name}} // returns welcome string
+		 	{{name.length()}}//java function //returns 6
+
+		 	{{testFunction()}} //returns hello
+		 	code on js:
+		 		testFunction()
+		 		{
+		 			return "hello";
+		 		}
+
+	Donot's:
+		not assign with expenression , etc
+		eg: 
+			{{a= 2+2}} //returns error
+			{{window.location.href}} // error 
+
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+

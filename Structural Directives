@@ -1,0 +1,197 @@
+														Structural Directives
+
+    * structural directives is used for the add or remove the DOM element (i.e., change the sturcture of DOM)
+    * There are three basci structural directrives in Angular
+
+    	@ *ngIf
+    	@ *ngSwitch
+    	@ *ngFor
+
+@ *ngIf :
+
+	*ngIf part : 
+	
+	 * *ngIf is condition based structural direcives which is used to add or remove the DOM element based on the condition result (true or 	false).
+	 * For using this we can give it like attribute (i.e., <h4 *ngIf="true">test if</h4> it returns the test if because the value is true) 
+	 eg:
+
+	  on ts file:
+	   	public myVar = true;
+
+	  on HTML file:
+	   	<h4 *ngIf="myVar"> my code True </h4>
+
+
+	*ngIf with else Part:
+
+	 * We can use the else part in two methods
+	 	-> using template referance Variable
+	 	-> using the <ng-template> tag for the both if and else condition and render the part which will render with the tag that 
+	 	   contain *ngIF
+
+	 I) using template referance Variable:
+
+		 * To import the else part we seperate the else part into the new tag within the built-in angular tag <ng-template>
+		 * For Working with else part use the ';' in double Quotes after the expression result and add the 'else' then add the template 
+		   referance variable to show the else part tag
+
+		 eg:
+
+		  on ts file:
+		   	public myVar = false;
+
+		  on HTML file:
+		   	<h4 *ngIf="myVar; else temRefVar"> my code True </h4>
+		   	<ng-template #tempRefVar>
+		   		<h4>False</h4>
+		   	</ng-template>
+		  It check for the myVar true or false, if it true it display the "my code true" else it check for the templateReferanceVariable and 
+		  display the content in tempRefVar contains
+
+	 II) using another method:
+
+	 	* In this we use the <ng-template> for the true part and false part with template reference variable then render the
+	 	  part by condition result.
+
+	 	eg:
+
+	 	 on ts file:
+	 	 	public checkCondition = true;
+
+	 	 on HTML :
+	 	 	<div *ngIf="checkCondition; then #truePart; else $falsePart"></div>
+
+	 	 	<ng-template #truePart>
+	 	 		<h4>trueBlock</h4>
+	 	 	</ng-template>
+
+	 	 	<ng-template #falsePart>
+	 	 		<h4>falseBlock</h4>
+	 	 	</ng-template>
+
+------------------------------------------------------------------------
+ 
+@ *ngSwitch:
+
+	general syntax:
+
+		<div [ngSwitch]="variable">
+			<h1 *ngSwitchCase="'case name'"> ... </h1>
+			<h2 *ngSwitchCase="'case name'"> ... </h2>
+			<h3 *ngSwitchCase="'case name'"> ... </h3>
+			<h6 *ngSwitchDefault> ... </h6>
+		</div>
+
+	* *ngSwitch like the switch condition in all language.
+	* it checks the cases with given condition if any of the condition is satisfies then it show the satisfied tag values
+	eg:
+
+	 on ts file:
+	 	public carName = "audi";
+
+	 on HTML:
+	 	<div [ngswitch]="carName">
+	 		<div *ngSwitchCase="'BMW'"> You pick the BMW car </div>
+	 		<div *ngSwitchCase="'audi'"> You pick the audi car </div>
+	 		<div *ngSwitchCase="'ford'"> You pick the ford car </div>
+	 		<div *ngSwitchDefault> Please select any one </div>
+	 	</div>
+
+	 * It  returns the audi case line "You pick the audi car"
+
+-------------------------------------------------------------------------------------
+
+@ *ngFor:
+	
+	* *ngFor is same as for in php and other languages.
+	* it itrate the arrays or arrays of object to get the multiple values in single syntax
+
+	eg:
+
+	 on ts file:
+	  	public cars = ["BMW","Audi","Ford"];
+
+	 on HTML :
+	 	<div *ngFor="let car of cars">
+	 		<h1>{{cars}}</h1>
+	 	</div>
+
+	* In *ngFor it has many shortcuts to know the first and last value etc
+	* In *ngFor to check if the value is first,last,odd,even and index give the condition with normal ngFor syntax.
+	  eg:
+	   <div *ngFor="let car of cars; firts as f">
+	 		<h1>{{f}} {{cars}}</h1>
+	 	</div>	   
+	 	it returns the value with true BMW, false Audi, etc
+	* These are want to combined with ngIf or ngSwitch to remove or add the particular element in DOM or class
+
+---------------------------------------------------------------------------------------------
+
+22-05-2020
+
+Component Interaction:
+
+	* In angular we can interact with one to another component for this angular has built in functions and decorators
+	* we interact the component in tow ways
+
+	  @ parent to child component (using @Input())
+	  @ child to parent component (using @Output() and EventEmitter module)
+
+ @ parent to child Component:
+
+ 	* For this type we use the decorator @Input() and also must import 'Input' from '@anguler/core' pack.
+ 	* This is not complex one because the parent component already intract with child.
+ 	* In parent HTMl file at the area of selector tag of child component place a variable what to send to child Component with property 
+ 	  binding method (i.e, []) with in the square bracket give a name that is used in child coponent (i.e., [parantData])  .
+ 	* Then receive it from child Component by using @Input decorator with same name given in parent (i.e., @Input() public parant;)and 
+ 	  import the module Input from 'angular/core'.
+
+ 	eg:
+
+ 	 on parent ts file:
+ 	 	public title = "welcome"; 
+
+ 	 on parent HTML:
+ 	 	<app-selector [parantData]="title"></app-selector>
+
+ 	 on child ts file:
+ 	 	import the Input module then,
+ 	 	@Input() public parentData;
+
+ 	 on child HTML :to (display)
+ 	 	{{parentData}} //it shows welcome in browser
+
+ @ child to parent Component:
+
+  	* For this type we use the @Output decorator with EventEmitter and import the EventEmitter , Output module from '@angular/core'.
+  	* For this type we have some complex because the child have not contact with parent for that we use the EventEmitter with 'emit()'  
+  	  function.
+  	* import the EventEmitter and Output module and place the '@Output' decorator than 'public' access specifier before the variable 
+  	  what to pass, after that place the '= new EventEmitter()', this is for to know the angular this variable is set to interact with 
+  	  parent component.
+  	* In any event action where you want trigger the emit() with the variable name that want to interact with parent component.
+  	* At the parent component side In parent HTML get the variable by giving the variable name within paranthsis with "=" and 
+  	  doubleQuotes, with in quotes use a variable name to store the value from child and place'=$event' for to get the value from 
+  	  event because the child to parent is possible by events.
+  	 eg:
+
+  	  on Child ts file
+  	  	import EventEmitter,Output from '@angular/core'
+  	  	then 
+  	  	@Output public childValue = new EventEmitter();
+
+  	  	after that in any envent call the emit()
+  	  	onSubmit()
+  	  	{
+  	  		this.childValue.emit('hi');
+  	  	}
+
+  	  On parent HTML:
+  	  	{{message}} 
+  	  	<app-selector (childValue)="message=$event"></app-selector>
+
+  	  On parent ts file:
+  	  	public message ="";
+
+  	  It displays the  hi in browser in parent part
+	  

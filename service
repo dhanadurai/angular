@@ -1,0 +1,68 @@
+											Service
+
+	* service which is used to share data from one to another or many components
+	* The services file is naming with '<service name>.service.ts'
+	  eg: 
+	  	serviceApp.service.ts
+	* To create the serivce class file use the cpl command 'ng g s <service name>'.
+	* In the service file the common dependency logics are built. for ex (age calculation logic).
+	* It is used to share the data with components and to avoid the code duplcation.
+	* It is also used to connec with database or backend scripts.
+  
+----------------------------------------------------------------------------
+
+Dependency Injection(DI):
+
+	* DI explains how to write te code and it helps to write the service optimized.
+    * The code without DI in a program => For any change in program, the structure is modified, so the code control 
+      will be lost.
+ 	* DI as design Pattern => a class that receives the dependencies from external sources. It creates the problem for 
+ 	  developer to maintain the code.
+ 	* DI as a framework => To solve the above problems and give the solution to use the built in angular DI framework
+ 	  It takes the care of list of dependencies and code get optimized with reusabilities.
+ 	* In DI frame work there are three steps in their:
+
+ 	 	@ create the class service files
+ 	 	@ register with injector
+ 	 	@ declare the service file as dependencies where it wants
+
+ create the class service file:
+
+   	* To  create the service class file use the command 'ng g s <service name>'.
+   	* The naming of the service is '<service name>.service.ts'.
+
+ Register with Injectors:
+
+  	* we can register the dependencies in any class file, In angular hirarchical DI framework, The dependencies were 
+  	  register in component.ts,child component.ts or appModule.ts
+  	* If the dependencies are register in component or child component.ts file then the service is accessed with in the 
+  	  child are only used in that child component or component only and that service is not use in outside the component.
+  	* If the dependencies are register in appModule.ts file then the service will used in all the component and module 
+  	  under the appComponent.
+  	* In AppComponent import the service file and enter the service class name in provider array under the @ngModule()
+  	  Decarator.
+
+ Declare the dependencies where it wants:
+
+  	* The dependency is decleared in constructor of component class where want to use.
+  	  eg:
+  	  	constructor (private _empService : employeeService){}
+  	* By using the variable _empService get the value that want from the service file on life cycle hook functions, In onInit() 
+  	  lifecyclehook get the data from service class file using _empService variable with function or vairable name in service file and 
+  	  assign it to the local variable.
+  	  eg :
+  	  	onInit()
+  	  	{
+  	  		this.employee = this._empService.getEmpployee();  	  	
+  	  	}
+
+  	  	on service file:
+  	  	getEmployee(){
+  	  		return {"name":"ddc","age":"21"};
+  	  	}
+
+ @Injectable():file
+
+ 	* The @Injectable() decarator tells the angular this is not a normal class file and this service file.
+ 	* The @Injectable() is tells the angular that this file is also self injectable and this file can injectable to any other service. 
+

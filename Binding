@@ -1,0 +1,327 @@
+													Binding
+
+Binding is the most important future in the angular to interact with DOM to view logics and view logics to DOM
+
+categoryies of binding:
+
+	@ From the source-to-view 
+	@ From view-to-source
+	@ Two-way sequence: view-to-source-to-view
+
+Types of Binding based category:
+	
+	@ From the source-to-view 	
+		> Interpolation
+		> Property
+		> Attribute
+		> Class
+		> Style
+	 
+	 genral syntax for S-V
+	 	
+	 	{{expression}} -- Interpolation
+		
+		[target]="expression"
+				(or)
+		bind-target="expression"
+
+	@ From view-to-source
+		> Event
+
+	  genral syntax for V-S
+	 	(target)="statement"
+	 			(or)
+		on-target="statement"
+
+	@ Two-way sequence: view-to-source-to-view
+		> Two-way
+
+	 genral syntax for two-way binding
+	 	[(target)]="expression"
+				(or)
+		bindon-target="expression"
+
+--------------------------------------------------------------------------------------------
+
+@ From the source-to-view :
+
+	Interpolation:
+
+		* Interpolation is nothing but rendering the ts class variable into the template by using {{}}
+		* For first we declare a variable in class ts file 
+			eg: 
+				public name = "string";
+		* we can use the variable name within the {{}} to append it in html to view
+			eg:
+				<div>{{name}}</div>
+
+		Do's:
+
+			we can use the interpolation with expression , string append ,etc
+			eg :
+			 	{{2+2}} //returns 4
+			 	{{'welcome ' + name}} // returns welcome string
+			 	{{name.length()}}//java function //returns 6
+
+			 	{{testFunction()}} //returns hello
+			 	code on js:
+			 		testFunction()
+			 		{
+			 			return "hello";
+			 		}
+
+		Donot's:
+			not assign with expenression , etc
+			eg: 
+				{{a= 2+2}} //returns error
+				{{window.location.href}} // error 
+
+ ---------------------------------------------------------------------------
+
+
+	Property Binding:
+		
+		* To get the attribute value of current tag use "$0.getAttrbute('value')" in console
+		* To get the property value of current tag use "$0.value()" in console
+
+		Difference b/w attribute and property 
+		
+			@ attribute and property are not same
+			@ attribute is an HTML content and once it initialize the DOM (property) values and the attribute value not changed
+			@ property value has change  
+
+		* we can bind the property by using [](square brackets)
+		  eg: 
+		  	<input type="text" [id] = "myid" name="test" value = "Angular">
+
+		  	in component.ts file 
+		  	public myid = "angularId";
+
+		  	then in DOM it refelcts as id = "angularId"
+
+		Uses of property binding instead of interpolation
+
+			@ interpolation has limited values and it only replace the strings 
+			@ property binding can render the html , boolean and string to repalce 
+
+		* property binding and interpolation variations:
+
+			eg for interpolation : 
+				<input type="text" id = "{{myid}}" name="test" value = "Angular"> //result id = "angularId" on DOM
+			but if a boolean value came into the view it not work
+				<input type="text" id = "{{myid}}" name="test" value = "Angular" disabled = "{{false}}"> //result it cant get any impact on the Dom and the element will on disabled state only for this much of case we want the property binding
+
+			eg for Property binding:
+				<input type="text" [id] = "myid" name="test" value = "Angular"> //result id = "angularId" on DOM
+			if incase of the boolean values it worked
+				<input type="text" [id] = "myid" name="test" value = "Angular" [disabled] = "isDisabled"> //it enable the text to edit
+
+				in component.ts file
+
+					public isDisabled = false;
+
+ -------------------------------------------------------------------------
+
+	20-05-2020:
+
+	Class Binding:
+
+
+		* Class binding is nothing but bind the class into the DOM like as property binding.
+		* class binding is allows us to remove or add the dynamically. 
+		* we can't use the class attribute and class binding in same tag, if we does it only takes the classbinding class only.
+
+		* There are three ways to get the class binding
+			
+			I) normal binding. syntax =>  (<p [class]="variable/property name">..</p>) 
+			II) binding with experession or single condition. syntax => (<p [class.className] = "property name">..</p>) 
+			III) binding with more than one condition. syntax => (<p [ngClass]="object property">..</p>) {[ngClass] is an directive}
+
+		 Normal Binding:
+
+			-> class binding with square bracket surround by class attribute (i.e., <p [class]="success"></p>), it is normal class       
+			   binding the class which is bind from a property that has the value of class name.
+			   	eg: 
+
+			   	on CSS
+			   		.cls-success
+			   		{
+			   			color:green;
+			   		}
+			   	
+			   	on ts file (setting the property )
+			   		public success = "cls-success"
+
+			   	on HTML
+			   		<p [class]="success">My code</p>
+			
+		 Binding with expression or single condition :
+
+			-> In this method we can bind the class by the condtion or experession (i.e., true or false),if the condition is true it binds 
+			   the class into the tag ,for this binding implementation we done the condition or expression on ts file.
+			   eg:
+
+			    on CSS
+			   		.cls-failure
+			   		{
+			   			color:red;
+			   		}
+			    on ts file (checking the expression or condition)
+			   		public checkCondition = false;
+			   				(or)
+			   		public checkCondition = 1 != 1 ;
+
+			   	on HTML
+			   		<p [class.cls-failure]="checkCondition">My code</p>
+
+		 Binding with more than one condition :
+
+		 	-> In this binding we use the angular directive as ngClass.
+		 	-> directive is a coustom class that are provided by angular.
+		 	-> for this directive the input will be on object as datatype , In the object it has the multiple classes with condition as value
+		 	   for eg:
+		 	   		checkMultiConditions = {
+		 	   				cls-success: this.checkCondition, //it means if the checkCondition is true then  it append the property to that 									tag
+		 	   				cls-failure: !this.checkCondition //it means if the checkCondition is not true then it append the property to 										that tag
+		 	   		}
+		 	-> In that object the classes are added to tag which all are statisfies the condition or in true state
+			   eg:
+
+			 	on ts file (checking the expression or condition)
+			   		public checkMultiConditions = {
+			   						cls-success: !this.checkCondition,
+			   						cls-failure: this.checkCondition
+			   		};
+			   				
+
+				on HTML
+			   		<p [ngClass]="checkMultiConditions">My code</p>// it only appends the class whose value in the object is true 			             									  (i.e., cls-success), and ignores the 'cls-failure' class.
+
+ -------------------------------------------------------------------------------------
+
+	Style Binding:
+
+		* style binding is used to bind the sepecific style property to the tag.
+		* By using the style binding we change the style for tag dynamically
+		* there are three ways to get the style binding 
+			I) normal style bnding. syntax => (<p [style.<css property name > = "'<value>'"]></p>)
+			II) style binding with variable / property. syntax => (<p [style.<css property name > = "variable name that contains the value   
+			                                                       for css property"]></p>)
+			III) style binding with directives. syntax => (<p [style]="object that has many css property"></p>)
+
+		Normal style bnding:
+
+			-> In sytle binding the value must sorrounnded by single quotes and  covered by double quotes ("'abc'")
+			eg:
+
+			 on HTML :
+			 	<p [style.color]="'red'">..</p>
+			 				(or)
+			 	<p [style.size]="'20px'">..</p>
+
+		Style binding with variable:
+
+			-> In this type we just replace the variable instead of direct value
+			eg:
+
+			 on ts file:
+			 	public sytleVariable = "green";
+
+			 on HTML :
+			 	<p [style.color]="sytleVariable">..</p>
+
+		Style binding with directives:
+
+			-> In this type give the value as object type, In the object we can give multiple css properties.
+			-> Inside the object we not use the hypen symbol(-) instead of this we use the camelCase letter (text-align => textAlign)
+			eg:
+			 on ts file :
+			 	public objStyle = {
+			 			color:red,
+			 			fontSize:10px,
+			 			textAlign:center
+			 	};
+			  on HTML:
+			  	<p [ngStyle] = "objStyle">..</p>
+
+-------------------------------------------------------------------------------------------
+		 				
+@ From view-to-source :
+
+	Event Binding : 
+
+		* Event binding is used to change the flow execution by one to another or calling an function to execute another part of project
+		* Event binding is nothing but the actions or event performed by keyboard or mouse
+		* the event binding has the special variable as parameter to get the $event DOM values, the '$event' variable gives all the 
+		  information about the event. eg:type, x-axis, y-axis ,Z-axis ,etc.
+		* In angular the event binding is not work with out parenthesis. 
+			for eg :   
+				<button click="action()">touch it</button> // the event is not initiated
+		* the event binding is done by the event name enclosed with in parenthsis 
+		eg:
+
+		 without event variable:
+		 on ts file :
+		 	public action ()
+		 	{
+		 		alert("ddc");
+		 	}
+		 on HTML :
+		 	<button (click)="action()">touch it</button> //it trigger the alert msg with ddc
+
+		 with event variable:
+		 on ts file :
+		 	public action (event)
+		 	{
+		 		alert(event.type);
+		 	}
+		 on HTML :
+		 	<button (click)="action($event)">touch it</button> //it trigger the alert msg with click
+
+--------------------------------------------------------------------------------------------------------------
+
+Template Referance Variables:
+
+	* It is used to get the input elements value that bind with a event 
+	* The Template reference variable is starting with '#' symbol before the variable name and the variable is act as attribute
+	* The value of input is passed as argument by using the ".value" behind the template referance variable or else it just give the 
+	  input tag only not its value
+	eg:
+
+	 it helps us to get the input for validationsd
+	 on ts file:
+	 	public action(value)
+	 	{
+	 	 	alert(value + " hi");
+	 	}
+
+	 on HTML:
+	 	<input #inputVar type ="text">
+	 	<button (click)="action(inputVar.value)"></button>// it triggers the alert with the input value with hi
+
+-------------------------------------------------------------------------------------------------------------
+
+@ Two-way sequence: view-to-source-to-view
+
+	* Two way binding is used to bind the model and view or DOM and class.
+	* For two way binding we want to import the 'FormsModule' and add it on the imports array under the @NgModule decorator
+	  in app.module.ts
+	* For using the two-way binding use the ngModle with surrounded by paranthesis with square bracker "[(ngModle)]", by using this 
+	  we bind the view and model.
+	* the two way binding update and view the property.
+
+	eg:
+
+	 on the ts file:
+	 	public name ="";
+
+	  on app.module.ts:
+	  	import {FormsModules} from '@angular/forms' and
+	  At decorator
+	  	imports: [
+	  		BrowserModule,
+	  		FormsModule
+	  	]
+	 on HTML :
+	 	<input [(ngModel)]="name" type="text">
+	 	{{name}}

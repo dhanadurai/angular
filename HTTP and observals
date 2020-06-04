@@ -1,0 +1,153 @@
+												HTTP and Observables:
+
+HTTP:
+	
+	* The HTTP call is used to communicate anugular to server .
+	* To access the HTTP In app module.ts file, import the HttpClientModule form '@angular/common/http' and import arrays in @NgModule 
+	  decorator.
+	* In service file on constructor declare the dependencies of Http.
+	  eg:
+
+	    In service file:
+	    constructor (private http: httpClient)
+	    {}
+
+	    and call the http
+	    this.http.get(url);
+
+	* The HTTP call is done in service file.
+		 > get()
+		 > observables
+	* In HTTP we use the get() method to send a request to server by single Item and it returns a response that is called Observables
+	* We call the get() with urls as param and get the response as observables and cast the variable then suscribe the variable where it 
+	  wants and use it.
+
+	* service (HTTP) => get() -> server -> observables(response) -> service (HTTP) ->suscribed comonents
+	* four stpes to get HTTP
+
+		> Http request from Service
+		> receive the observables and cast it into array
+		> subscribe the observables from the component
+		> assign the observables into local variable
+
+
+ get()
+
+ 	* In this method we use param as url to send request for the server.
+ 	* calling the get() using the dependencies variable with get() in service file.
+ 	* import the 'httpCilent' in service filep
+ 	  eg:
+
+ 	  In ervice file:
+
+ 	   getEmployee()
+ 	   {
+ 	   		this.http.get(url);
+ 	   }
+
+ observables:
+
+ 	* observables are the term from server that is response from server.
+ 	* In observables we can do two things
+ 		* receive it from server.
+ 		* cast it into specified formate
+
+ 	 Recevice the observables:
+
+ 	 	* Before we receive the observables we want to make a specifed formate to cast it, for the creation of specified formate we use 
+ 	 	  the interface.
+ 	 	* To create the interface create new file with '.ts' as extension ,In the file create an interface by using 'export interface'  
+ 	 	  then  give the interface name with {} inside the {} give the structure that you want to cast that type.
+
+ 	 	  eg: 
+ 	 	    export interface sampleInterface{
+ 	 	    	constructor(){}
+ 	 	    	{
+ 	 	    		name:string,
+ 	 	    		age:number,
+ 	 	    		work:string
+ 	 	    	}
+ 	 	    }
+ 	 	* To get the observables import the observables from Rxjs in service file.
+ 	 	* In the getEmployee() after the functio name 'getEmployee' define with ':' and observables.
+ 	 	* Then in the call of get() function, import the interface class name with '[]' within '<>' to cast the observables into array.
+ 	 	  eg:
+
+ 	 	   In service File:
+ 	 	   import observables
+ 	 	   import HttpClientModule
+ 	 	   import sampleInterface
+
+ 	 	      getEmployee():observables
+ 	 	      {
+ 	 	      	return this.http.get:<sampleInterface[]>(this.url)
+ 	 	      }
+
+ 	 cast it into specified formate:
+
+ 	  * using the cretaed interface we cast the observables.
+
+
+ subscribe the observables from component:
+	
+	* To subscribe the  observales from component, first import the httpClient module in component  and in the part of service call 
+	  function after the service call add the '.subscribe()'.
+	* The subscribe function has the param as data that represents the observables after the data '=>' is used then a function is called
+	  to perform some actions like assing the data into local variable or other else.
+
+	 eg:
+	  In component.ts file:
+
+	  		import http
+	  		public employee;
+
+	  		public emp()
+	  		{
+	  			this._empService.getEmployee()
+	  					.subscribe(data => this.employee = data);
+	  		}
+	
+================================================================================================
+
+Error handling : 
+
+* Error handling takes place, if any error occurs in HTTP call the page goes with blank screen to avoid the blank screen use the 
+  error handling to return the any error handliong text or error messaege.
+* To the errorhandling import the httpClient and httpErrorResponse from http.
+* write the in built function catchError in the function that has the observables to get any error message.
+* The catchError method has argument as function, with in the function argument create the object for HttpErrorResponse, In the function 
+  return the error message that you want to display with in the Observables.throwError() method.
+
+  eg: 
+  In service file:
+
+  	import { Observable, throwError } from 'rxjs';
+	import { retry, catchError } from 'rxjs/operators';
+  	 getEmployee():observables
+      {
+      	return this.http.get:<sampleInterface[]>(this.url).catch(this.errorHandler)
+
+      }
+
+    errorHandler(error: HttpErrorResposne)
+    {
+    	return Observables.throw(error.message || 'error on url');
+    }
+
+* To show the error message in view page want to add the thrown error message in subscribe function as param with local varibale 
+  initailzation.
+
+  eg:
+
+  	public errorMsg;
+
+  	public emp()
+	{
+		this._empService.getEmployee()
+				.subscribe(data => this.employee = data,
+				           error => this.errorMsg);
+	}
+
+	on HTML file:
+
+	<h2>{{errorMsg}}</h2>
